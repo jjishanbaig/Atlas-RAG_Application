@@ -1,0 +1,20 @@
+
+*.pyc
+chroma_db/
+notes
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Generated RAG data and uploaded documents
+backend/chroma_db/
+backend/documents/*
+!backend/documents/.gitkeep

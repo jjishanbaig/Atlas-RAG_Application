@@ -1,0 +1,24 @@
+### How the app works
+
+This is a **RAG** app: it searches your uploaded documents for relevant text, then uses Gemini to answer based on that text.
+
+1. You open the FastAPI app in your browser. FastAPI serves the frontend files—HTML, CSS, and JavaScript—from the same local server.
+2. You select or drop in a PDF. The frontend sends it to the backend’s `POST /api/documents/upload` endpoint.
+3. The backend extracts text from the PDF with `pypdf`, splits it into chunks, and asks Gemini to create embeddings for those chunks.
+4. The backend stores the chunks, embeddings, and page information in ChromaDB.
+5. When you ask a question, the frontend sends it to `POST /api/chat/`. The backend embeds your question, searches ChromaDB for similar text, and sends the question plus matching text to Gemini.
+6. Gemini returns an answer, and the frontend shows it with source filenames and page numbers.
+
+The main technologies are **FastAPI and Uvicorn** for the local web server and API, **HTML/CSS/JavaScript** for the interface, **pypdf** for PDF text extraction, **Gemini** for embeddings and answers, and **ChromaDB** for storing and searching document chunks.
+
+### Why a “backend link” opens the UI
+
+Uvicorn runs the FastAPI server at `http://127.0.0.1:8001`. The address is called “backend” because it points to the Python server, but that server now also serves the frontend page at `/`.
+
+So opening:
+
+- `http://127.0.0.1:8001/` shows the UI.
+- `http://127.0.0.1:8001/docs` shows FastAPI’s API documentation.
+- `http://127.0.0.1:8001/health` checks whether the server is running.
+
+`127.0.0.1` means “this computer,” and `8001` is the port Uvicorn is listening on. The frontend JavaScript sends its upload and chat requests to the API routes on that server.
